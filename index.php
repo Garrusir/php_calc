@@ -88,7 +88,7 @@
             if (isset($prior[$lastop])){
               $prev_prior = $prior[$lastop]['prior'];
             }else {
-              $prev_prior = $prior[$lastop]['prior'];
+              $prev_prior = null
             } //приоритет предыдущего оператора
             switch ($curr_assoc) //проверяем текущую ассоциативность
             {
