@@ -19,7 +19,7 @@
     if (empty($str)){
       throw new Exception("Строка пуста", 1);
     }
-    if (preg_match("/[^0-9+\-*:\/() ]/m", $str)){
+    if (preg_match("/[^0-9+\-*:,\.\/() ]/m", $str)){
       throw new Exception("Недопустимые символы", 1);
     }
     if(preg_match("/[^\d()]{2,}/m", $str)){
@@ -88,7 +88,7 @@
             if (isset($prior[$lastop])){
               $prev_prior = $prior[$lastop]['prior'];
             }else {
-              $prev_prior=null;
+              $prev_prior = $prior[$lastop]['prior'];
             } //приоритет предыдущего оператора
             switch ($curr_assoc) //проверяем текущую ассоциативность
             {
@@ -192,8 +192,9 @@ function calc($str)
   {
     if (in_array($token, array('*', '/', '+', '-', '^')))
     {
-      if (count($stack) < 2)
+      if (count($stack) < 2){
         throw new Exception("Недостаточно данных в стеке для операции '$token'");
+      }
       $b = array_pop($stack);
       $a = array_pop($stack);
       switch ($token)
@@ -266,6 +267,7 @@ function calc($str)
           try {
             $value = validate($value);
             $rpn_str = rpn($value);
+            echo "$rpn_str";
             $result = calc($rpn_str);
             // echo("<br><b>rpn: $value</b>");
             echo "<div class='alert alert-success' role='alert'> Ответ: ".$result." </div>";
