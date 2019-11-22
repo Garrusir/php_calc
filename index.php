@@ -54,13 +54,21 @@
       "-"=> array("prior" => "2", "assoc" => "left"),
   );
   $token=preg_replace("/\s/", "", $str); //удалим все пробелы
+  $token=preg_replace("/\(-/", "(0-", $token);
+  
+
   $token=str_replace(",", ".", $token);//поменяем запятые на точки
   $token = str_split($token);
   /*проверим, не является ли первый символ знаком операции - тогда допишем 0 перед ним */
-  if (preg_match("/[\+\-\*\/\^]/",$token['0'])){array_unshift($token, "0");}
+  if (preg_match("/[\+\-\^]/",$token['0'])){
+    array_unshift($token, "0");
+  }
   $lastnum = TRUE; //в выражении теперь точно первым будет идти число - поставим маркер
   foreach ($token as $key=>$value)
   {
+    // print_r($stack);
+    // echo "<br>value:";
+    // print_r($value);
     // echo("<HR><br>elem=".$value." matched=".preg_match("/[\+\-\*\/\^]/",$value));
     if (preg_match("/[\+\-\*\/\^]/",$value))//если встретили оператор
       {
@@ -88,7 +96,7 @@
             if (isset($prior[$lastop])){
               $prev_prior = $prior[$lastop]['prior'];
             }else {
-              $prev_prior = null
+              $prev_prior = null;
             } //приоритет предыдущего оператора
             switch ($curr_assoc) //проверяем текущую ассоциативность
             {
@@ -265,9 +273,10 @@ function calc($str)
         if (isset($_POST['send'])&&!empty($_POST)){
           $value = str_replace(' ', '', $_POST['value']);
           try {
+            // echo "$value";
             $value = validate($value);
             $rpn_str = rpn($value);
-            echo "$rpn_str";
+            // echo "$rpn_str";
             $result = calc($rpn_str);
             // echo("<br><b>rpn: $value</b>");
             echo "<div class='alert alert-success' role='alert'> Ответ: ".$result." </div>";
