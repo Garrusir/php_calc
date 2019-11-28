@@ -22,6 +22,9 @@
     if (preg_match("/[^0-9+\-*:,\.\/() ]/m", $str)){
       throw new Exception("Недопустимые символы", 1);
     }
+    if(preg_match("/\d+[\.,\,]\D/", $str) || preg_match("/\d+[\.,\,]$/", $str)){
+       throw new Exception("Неверная запись дробного числа", 1);
+    }
     if(preg_match("/[^\d()]{2,}/m", $str)){
       throw new Exception("Неверная запись", 1);
     }
